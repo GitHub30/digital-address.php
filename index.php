@@ -48,6 +48,6 @@ $ch = curl_init("https://api.da.pf.japanpost.jp/api/v1/searchcode/$search_code")
 curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (compatible; DigitalAddress/1.0; +https://digital-address.app)');
 curl_setopt($ch, CURLOPT_HTTPHEADER, ["Authorization: Bearer $token"]);
 curl_exec($ch);
-curl_close($ch);
 http_response_code(curl_getinfo($ch, CURLINFO_RESPONSE_CODE));
 header('Content-Type: application/json');
+curl_close($ch);
