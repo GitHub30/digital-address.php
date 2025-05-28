@@ -31,9 +31,9 @@ if (!isset($token)) {
     curl_setopt($ch, CURLOPT_POSTFIELDS, file_get_contents('credentials.json'));
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     $json = curl_exec($ch);
+    $code = curl_getinfo($ch, CURLINFO_RESPONSE_CODE);
     curl_close($ch);
 
-    $code = curl_getinfo($ch, CURLINFO_RESPONSE_CODE);
     if ($code !== 200) {
         http_response_code($code);
         header('Content-Type: application/json');
