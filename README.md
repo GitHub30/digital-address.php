@@ -21,7 +21,8 @@ credentials.json
 }
 ```
 
-ソースコードの`credentials.json`や`access_token.json`のパスは公開ディレクトリに置かないようにパスを変更してください。
+> [!IMPORTANT]
+> 公開ディレクトリに置かないように、`credentials.json`や`access_token.json`のパスを変更できます。
 
 ### 3. 動作確認
 
