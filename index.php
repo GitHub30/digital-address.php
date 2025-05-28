@@ -26,7 +26,7 @@ if (file_exists($token_filename)) {
 
 if (!isset($token)) {
     $ch = curl_init('https://api.da.pf.japanpost.jp/api/v1/j/token');
-    curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (compatible; DigitalAddress/1.0; +https://digital-address.app)');
+    curl_setopt($ch, CURLOPT_USERAGENT, 'curl/' . curl_version()['version']);
     curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
     curl_setopt($ch, CURLOPT_POSTFIELDS, file_get_contents('credentials.json'));
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -45,7 +45,7 @@ if (!isset($token)) {
 }
 
 $ch = curl_init("https://api.da.pf.japanpost.jp/api/v1/searchcode/$search_code");
-curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (compatible; DigitalAddress/1.0; +https://digital-address.app)');
+curl_setopt($ch, CURLOPT_USERAGENT, 'curl/' . curl_version()['version']);
 curl_setopt($ch, CURLOPT_HTTPHEADER, ["Authorization: Bearer $token"]);
 curl_exec($ch);
 http_response_code(curl_getinfo($ch, CURLINFO_RESPONSE_CODE));
