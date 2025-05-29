@@ -8,6 +8,12 @@
 
 ## セットアップ
 
+### 0. システム登録
+
+IPアドレス 127.0.0.1 を設定してください
+
+![image](https://github.com/user-attachments/assets/1582c6f5-db1a-41d8-a202-95fc7258786e)
+
 ### 1. index.phpと.htaccessをアップロード
 
 ### 2. credentials.jsonの作成
