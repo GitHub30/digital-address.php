@@ -10,10 +10,6 @@ if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
 }
 
 $search_code = $_GET['search_code'] ?? ltrim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/');
-if (!preg_match('/^\w{3,7}$/', $search_code)) {
-    http_response_code(400);
-    exit;
-}
 
 $token_filename = 'access_token.json';
 if (file_exists($token_filename)) {
@@ -27,7 +23,7 @@ if (file_exists($token_filename)) {
 if (!isset($token)) {
     $ch = curl_init('https://api.da.pf.japanpost.jp/api/v1/j/token');
     curl_setopt($ch, CURLOPT_USERAGENT, 'curl/' . curl_version()['version']);
-    curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json', 'x-forwarded-for: 127.0.0.1']);
     curl_setopt($ch, CURLOPT_POSTFIELDS, file_get_contents('credentials.json'));
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     $json = curl_exec($ch);
@@ -44,10 +40,20 @@ if (!isset($token)) {
     $token = json_decode($json)->token;
 }
 
-$ch = curl_init("https://api.da.pf.japanpost.jp/api/v1/searchcode/$search_code");
-curl_setopt($ch, CURLOPT_USERAGENT, 'curl/' . curl_version()['version']);
-curl_setopt($ch, CURLOPT_HTTPHEADER, ["Authorization: Bearer $token"]);
-curl_exec($ch);
-http_response_code(curl_getinfo($ch, CURLINFO_RESPONSE_CODE));
 header('Content-Type: application/json');
-curl_close($ch);
+if (preg_match('/^\d{3,7}|\w{7}$/', $search_code)) {
+    $ch = curl_init("https://api.da.pf.japanpost.jp/api/v1/searchcode/$search_code");
+    curl_setopt($ch, CURLOPT_USERAGENT, 'curl/' . curl_version()['version']);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, ["Authorization: Bearer $token"]);
+    curl_exec($ch);
+    http_response_code(curl_getinfo($ch, CURLINFO_RESPONSE_CODE));
+    curl_close($ch);
+} else {
+    $ch = curl_init('https://api.da.pf.japanpost.jp/api/v1/addresszip');
+    curl_setopt($ch, CURLOPT_USERAGENT, 'curl/' . curl_version()['version']);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, ["Authorization: Bearer $token", 'Content-Type: application/json']);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode(['freeword' => $search_code]));
+    curl_exec($ch);
+    http_response_code(curl_getinfo($ch, CURLINFO_RESPONSE_CODE));
+    curl_close($ch);
+}
