@@ -9,7 +9,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
     exit;
 }
 
-$search_code = $_GET['search_code'] ?? ltrim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/');
+$search_code = $_GET['search_code'] ?? rawurldecode(ltrim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/'));
 
 $token_filename = 'access_token.json';
 if (file_exists($token_filename)) {
