@@ -1,3 +1,5 @@
+その他実装：[Vercel Functions](https://qiita.com/7mpy/items/6a8b489d9902dc021157) [Cloudflare Workers](https://qiita.com/7mpy/items/8dc2cdecce0bd516d359) [Deno Deploy](https://qiita.com/7mpy/items/0c420dc8f2aff3984461)
+
 # 郵便番号・デジタルアドレスAPI
 
 郵便番号・デジタルアドレスAPIのサーバーサイドのコードです。
